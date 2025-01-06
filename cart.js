@@ -1,10 +1,8 @@
-const scripts = document.getElementsByTagName('script');
-const currentScript = scripts[scripts.length - 1];
-const scriptSrc = currentScript.src;
-const urlParams = new URLSearchParams(scriptSrc.split('?')[1]);
-const popupHistory = [];
+const scriptUrl = new URL(document.currentScript.getAttribute('src'));
+const scriptParams = Object.fromEntries(scriptUrl.searchParams);
+console.log(scriptParams);
 
-console.log({ scripts, scriptSrc, currentScript, urlParams });
+const popupHistory = [];
 
 function parseCart(cart) {
   const lineItems = cart.items.map((item) => ({
