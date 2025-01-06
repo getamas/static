@@ -20,7 +20,7 @@ function parseCart(cart) {
 function runGreenspark() {
   const color = urlParams?.color ?? 'green';
   const widgetStyle = urlParams?.widgetStyle ?? 'default';
-  const withPopup = Boolean(urlParams?.withPopup) ?? true;
+  const withPopup = Boolean(urlParams?.withPopup);
   const popupTheme = 'light';
   const isoCode = Shopify.locale;
   const locale = ['en', 'de'].includes(isoCode) ? isoCode : 'en';
