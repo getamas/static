@@ -4,6 +4,8 @@ const scriptSrc = currentScript.src;
 const urlParams = new URLSearchParams(scriptSrc.split('?')[1]);
 const popupHistory = [];
 
+console.log({ scripts, scriptSrc, currentScript, urlParams });
+
 function parseCart(cart) {
   const lineItems = cart.items.map((item) => ({
     productId: item.product_id.toString(),
