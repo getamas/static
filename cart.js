@@ -30,13 +30,12 @@ function runGreenspark() {
     total_price: 0,
   };
   const shopUniqueName = Shopify.shop;
-  const cartEl = document.querySelector('.drawer__footer');
+  const cartEl = document.querySelector('.cart__footer, .drawer__footer');
   const gsWidgetTargetEl = document.querySelector('[data-greenspark-widget-target]');
 
-  if (!gsWidgetTargetEl) {
+  if (cartEl && !gsWidgetTargetEl) {
     cartEl.insertAdjacentHTML('afterbegin', '<div data-greenspark-widget-target></div>');
   }
-
   const greenspark = new window.GreensparkWidgets({
     locale,
     integrationSlug: Shopify.designMode ? 'GS_PREVIEW' : shopUniqueName,
