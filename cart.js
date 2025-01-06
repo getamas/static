@@ -19,8 +19,8 @@ function parseCart(cart) {
 }
 
 function runGreenspark() {
-  const color = urlParams.get('color') ?? 'green';
-  const widgetStyle = urlParams.get('widgetStyle') ?? 'default';
+  const color = 'green';
+  const widgetStyle = 'default';
   const withPopup = Boolean(true);
   const popupTheme = 'light';
   const isoCode = Shopify.locale;
