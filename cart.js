@@ -1,6 +1,5 @@
 const scriptUrl = new URL(document.currentScript.getAttribute('src'));
 const urlParams = Object.fromEntries(scriptUrl.searchParams);
-console.log(urlParams);
 
 const popupHistory = [];
 
