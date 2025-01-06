@@ -1,6 +1,6 @@
 const scriptUrl = new URL(document.currentScript.getAttribute('src'));
-const scriptParams = Object.fromEntries(scriptUrl.searchParams);
-console.log(scriptParams);
+const urlParams = Object.fromEntries(scriptUrl.searchParams);
+console.log(urlParams);
 
 const popupHistory = [];
 
@@ -19,8 +19,8 @@ function parseCart(cart) {
 }
 
 function runGreenspark() {
-  const color = 'green';
-  const widgetStyle = 'default';
+  const color = urlParams?.color ?? 'green';
+  const widgetStyle = urlParams?.widgetStyle ?? 'default';
   const withPopup = Boolean(true);
   const popupTheme = 'light';
   const isoCode = Shopify.locale;
