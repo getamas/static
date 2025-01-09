@@ -22,7 +22,6 @@ function runGreenspark() {
 
   const scriptUrl = new URL(scriptSrc);
   const urlParams = Object.fromEntries(scriptUrl.searchParams);
-  const apiKey = urlParams.api_key;
   const color = urlParams?.color ?? 'green';
   const widgetStyle = urlParams?.widgetStyle ?? 'default';
   const withPopup = urlParams?.withPopup === '1';
@@ -43,7 +42,6 @@ function runGreenspark() {
   }
 
   const greenspark = new window.GreensparkWidgets({
-    apiKey,
     locale,
     integrationSlug: shopUniqueName,
     isShopifyIntegration: true,
