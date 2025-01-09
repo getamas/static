@@ -1,6 +1,4 @@
-const scriptUrl = new URL(document.currentScript.getAttribute('src'));
-const urlParams = Object.fromEntries(scriptUrl.searchParams);
-
+const scriptSrc = document.currentScript?.getAttribute('src');
 const popupHistory = [];
 
 function parseCart(cart) {
@@ -18,28 +16,37 @@ function parseCart(cart) {
 }
 
 function runGreenspark() {
+  if (!scriptSrc) {
+    return;
+  }
+
+  const scriptUrl = new URL(scriptSrc);
+  const urlParams = Object.fromEntries(scriptUrl.searchParams);
+  const apiKey = urlParams.api_key;
   const color = urlParams?.color ?? 'green';
   const widgetStyle = urlParams?.widgetStyle ?? 'default';
   const withPopup = urlParams?.withPopup === '1';
   const popupTheme = 'light';
-  const isoCode = Shopify.locale;
+  const isoCode = window.Shopify.locale;
   const locale = ['en', 'de'].includes(isoCode) ? isoCode : 'en';
   const initialCart = {
     items: [],
     currency: 'GBP',
     total_price: 0,
   };
-  const shopUniqueName = Shopify.shop;
+  const shopUniqueName = window.Shopify.shop;
   const cartEl = document.querySelector('.cart__footer, .drawer__footer');
   const gsWidgetTargetEl = document.querySelector('[data-greenspark-widget-target]');
 
   if (cartEl && !gsWidgetTargetEl) {
     cartEl.insertAdjacentHTML('afterbegin', '<div data-greenspark-widget-target></div>');
   }
+
   const greenspark = new window.GreensparkWidgets({
+    apiKey,
     locale,
-    integrationSlug: Shopify.designMode ? 'GS_PREVIEW' : shopUniqueName,
-    isShopifyIntegration: Shopify.designMode ? false : true,
+    integrationSlug: shopUniqueName,
+    isShopifyIntegration: true,
   });
 
   const widget = greenspark.cart({
@@ -62,8 +69,10 @@ function runGreenspark() {
     });
 
     const popup = document.querySelector('.gs-popup');
-    document.body.append(popup);
-    popupHistory.push(popup);
+    if (popup) {
+      document.body.append(popup);
+      popupHistory.push(popup);
+    }
   };
 
   fetch('/cart.js')
@@ -83,26 +92,40 @@ function runGreenspark() {
 
 function loadScript(url) {
   return new Promise((resolve) => {
-    var script = document.createElement('script');
+    const script = document.createElement('script');
     script.type = 'text/javascript';
     script.onload = function () {
       resolve();
     };
 
     script.src = url;
-    document.querySelector('head').appendChild(script);
+    const head = document.querySelector('head');
+
+    if (head) {
+      head.appendChild(script);
+    }
   });
 }
 
-const packageUrl = 'https://cdn.getgreenspark.com/scripts/widgets%401.6.1-0-umd.js';
+async function setup() {
+  if (window.GreensparkWidgets) return;
+  await loadScript('https://cdn.getgreenspark.com/scripts/widgets%40latest.js');
+  window.dispatchEvent(new Event('greenspark-setup'));
+}
 
-loadScript(packageUrl).then(runGreenspark);
+setup().catch((e) => console.error('Greenspark Widget -', e));
+
+if (!window.GreensparkWidgets) {
+  window.addEventListener('greenspark-setup', runGreenspark, { once: true });
+} else {
+  runGreenspark();
+}
 
 (function (context, fetch) {
   if (typeof fetch !== 'function') return;
 
-  context.fetch = function () {
-    const response = fetch.apply(this, arguments);
+  context.fetch = function (...args) {
+    const response = fetch.apply(this, args);
 
     response.then((res) => {
       if (
