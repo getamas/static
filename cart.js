@@ -41,6 +41,8 @@ function runGreenspark() {
     cartEl.insertAdjacentHTML('afterbegin', '<div data-greenspark-widget-target></div>');
   }
 
+  console.log('Shopify.designMode:', Shopify.designMode);
+
   const greenspark = new window.GreensparkWidgets({
     locale,
     integrationSlug: Shopify.designMode ? 'GS_PREVIEW' : shopUniqueName,
@@ -107,7 +109,7 @@ function loadScript(url) {
 
 async function setup() {
   if (window.GreensparkWidgets) return;
-  await loadScript('https://cdn.getgreenspark.com/scripts/widgets%40latest.js');
+  await loadScript('https://cdn.getgreenspark.com/scripts/widgets%401.6.1-0-umd.js');
   window.dispatchEvent(new Event('greenspark-setup'));
 }
 
