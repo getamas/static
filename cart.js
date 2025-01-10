@@ -1,3 +1,7 @@
+const isDevStore = window.location.hostname.includes('greenspark-development-store');
+const widgetUrl = isDevStore
+  ? 'https://cdn.getgreenspark.com/scripts/widgets%401.6.1-0-umd.js'
+  : 'https://cdn.getgreenspark.com/scripts/widgets%40latest.js';
 const scriptSrc = document.currentScript?.getAttribute('src');
 const popupHistory = [];
 
@@ -40,8 +44,6 @@ function runGreenspark() {
   if (cartEl && !gsWidgetTargetEl) {
     cartEl.insertAdjacentHTML('afterbegin', '<div data-greenspark-widget-target></div>');
   }
-
-  console.log('Shopify.designMode:', Shopify.designMode);
 
   const greenspark = new window.GreensparkWidgets({
     locale,
@@ -109,7 +111,7 @@ function loadScript(url) {
 
 async function setup() {
   if (window.GreensparkWidgets) return;
-  await loadScript('https://cdn.getgreenspark.com/scripts/widgets%401.6.1-0-umd.js');
+  await loadScript(widgetUrl);
   window.dispatchEvent(new Event('greenspark-setup'));
 }
 
