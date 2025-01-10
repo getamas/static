@@ -43,8 +43,8 @@ function runGreenspark() {
 
   const greenspark = new window.GreensparkWidgets({
     locale,
-    integrationSlug: shopUniqueName,
-    isShopifyIntegration: true,
+    integrationSlug: Shopify.designMode ? 'GS_PREVIEW' : shopUniqueName,
+    isShopifyIntegration: Shopify.designMode ? false : true,
   });
 
   const widget = greenspark.cart({
